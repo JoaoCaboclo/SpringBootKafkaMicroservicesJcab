@@ -2,6 +2,11 @@
 # Spring Boot Kafka Microservices
 
     Estudos e Pesquisas do João Caboclo da S. Filho
+
+    Adorei este trabalho!!  -  
+    Com certeza irá ajudar muitos!  -  
+    Dúvidas: johncaboclo@gmail.com, ou me chama pelo linkedin mesmo.
+
     Adicionei esta documentação para ajudar na compreensão e desenvolvimento do projeto
     Espero que te ajude a evoluir, assim como ajudou-me!!!!
     Setembro de 2023 - Uberlândia/Minas gerais/Brasil
@@ -402,11 +407,48 @@ Ao executar o micro serviço, verifique o log no intellij
                                       qty=1, 
                                       price=100000.0))
 
+Agora, tendo o order-service e o stock-service em execução, vamos fazer um teste 
+enviando um um order service event pelo Postman
 
+![img_39.png](img_39.png)
 
+Executando o teste pelo POSTMAN
 
+![img_40.png](img_40.png)
+
+Consultando no Log do Intelij
+
+    No PRODUCER ORDER-SERVICE
+
+    2023-09-02T19:51:19.377-03:00  INFO 17244 --- [nio-8080-exec-2]
+       c.j.orderservice.kafka.OrderProducer     : 
+       Order event ==> OrderEvent(message=Order status is in pending state, 
+            status=PENDING, order=Order(orderId=a677a795-d3a2-4d66-8ec5-c4c2be79208c, 
+            name=Tablet black man - João Caboclo, qty=5, price=500000.0))
+
+    No CONSUMER STOCK-SERVICE
+    
+    2023-09-02T19:51:19.685-03:00  INFO 3804 --- [ntainer#0-0-C-1] 
+       c.j.stockservice.kafka.OrderConsumer     : Order event received in stock-service ==>
+           OrderEvent(message=Order status is in pending state, status=PENDING, 
+           order=Order(orderId=a677a795-d3a2-4d66-8ec5-c4c2be79208c, 
+           name=Tablet black man - João Caboclo, qty=5, price=500000.0))
+
+Consultando no KAFKADROP
+     http://localhost:9000/
+
+![img_41.png](img_41.png)
+
+     http://localhost:9000/topic/order_topics
+![img_42.png](img_42.png)
+
+http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100&keyFormat=DEFAULT&format=DEFAULT
+
+![img_43.png](img_43.png)
 
     
+Finalizando por aqui
+
 
 
 
