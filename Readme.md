@@ -316,7 +316,91 @@ http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100
 ![img_34.png](img_34.png)
 
 
+## Agora iremos configurar o KAFKA CONSUMER no micro serviço Stock-Service
 
+![img_35.png](img_35.png)
+
+Vários consumidores
+
+![img_36.png](img_36.png)
+
+Configurando o CONSUMER no arquivo application.properties do micro serviço stock-service
+
+    server.port=8081
+    
+    ## Esta propriedade indica que este consumidor ficará escutando/atento
+    ## a qualquer mensagem/evento que chegar no kafka que está rodando na porta 9092
+    spring.kafka.consumer.bootstrap-servers: localhost:9092
+    
+    ## Nome do grupo é importante para o caso de termos vários consumidores buscando do mesmo tópico
+    spring.kafka.consumer.group-id: stock
+    
+    ##  Configurando a deserialização do objeto para JSON
+    spring.kafka.consumer.auto-offset-reset: earliest
+    spring.kafka.consumer.key-deserializer: org.apache.kafka.common.serialization.StringDeserializer
+    spring.kafka.consumer.value-deserializer: org.springframework.kafka.support.serializer.JsonDeserializer
+    spring.kafka.consumer.properties.spring.json.trusted.packages=*
+    
+    ## tem que ser o mesmo nome do tópico que foi definido lá no Produtor ( micro serviço order-service )
+    spring.kafka.topic.name=order_topics
+
+Lembrando que para rodar os micros serviços é preciso que os serviços abaixo esteja rodando
+    
+    C:\Users\joao.filho\kafka
+    ZooKeeper 
+         comando:  .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+    Kafka
+         comando:  .\bin\windows\kafka-server-start.bat .\config\server.properties
+
+    Para consultar/gerenciar os  tópicos no kafka - rodar também o kafkadrop 
+       C:\Users\joao.filho\kafka-drop
+         comando: java -jar kafkadrop.jar -kafka.brokerConnect=localhost:9092
+Executando o micro serviço stock-service após configurarmos o consumer lá no arquivo application.properties
+
+![img_37.png](img_37.png)
+
+Estruta do micro serviço stock-service
+
+![img_38.png](img_38.png)
+
+Criando a class consumer
+
+    package com.jcaboclo.stockservice.kafka;
+    
+    import com.jcaboclo.basedomains.dto.OrderEvent;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.kafka.annotation.KafkaListener;
+    import org.springframework.stereotype.Service;
+
+    @Service
+    public class OrderConsumer {
+        private static final Logger LOGGER = LoggerFactory.getLogger(OrderConsumer.class);
+   
+        @KafkaListener(
+           topics = "${spring.kafka.topic.name}",
+           groupId = "${spring.kafka.consumer.group-id}"
+        )
+        public void consume(OrderEvent event) {
+ 
+           LOGGER.info(String.format("Order event received in stock-service ==> %s", event.toString()));
+    
+          // todo
+          //   Save the order event into the database
+        }
+    }
+
+
+
+Ao executar o micro serviço, verifique o log no intellij
+
+2023-09-02T19:25:48.565-03:00  INFO 8604 --- [ntainer#0-0-C-1] 
+    c.j.stockservice.kafka.OrderConsumer     : **Order event received in stock-service** 
+      ==> OrderEvent(message=Order status is in pending state, 
+          status=PENDING, order=Order(orderId=f60f5697-272d-4f4f-9d9f-f59907cca717, 
+                                      name=laptop order, 
+                                      qty=1, 
+                                      price=100000.0))
 
 
 
