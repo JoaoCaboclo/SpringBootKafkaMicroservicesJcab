@@ -1,6 +1,14 @@
 
-Spring Boot Kafka Microservices
-https://www.youtube.com/watch?v=LfXI307zQxE&list=PLGRDMO4rOGcOlnu6QhogZDNFFwiwKh5X9&index=4
+# Spring Boot Kafka Microservices
+
+    Estudos e Pesquisas do João Caboclo da S. Filho
+    Adicionei esta documentação para ajudar na compreensão e desenvolvimento do projeto
+    Espero que te ajude a evoluir, assim como ajudou-me!!!!
+    Setembro de 2023 - Uberlândia/Minas gerais/Brasil
+
+    Vídeo aula base do aprendizado: https://www.youtube.com/playlist?list=PLGRDMO4rOGcOlnu6QhogZDNFFwiwKh5X9
+
+    
 
 ![img_6.png](img_6.png)
 
