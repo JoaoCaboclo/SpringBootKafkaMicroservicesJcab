@@ -446,7 +446,80 @@ http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100
 
 ![img_43.png](img_43.png)
 
-    
+## Configurando o DOCKER-COMPOSE
+
+       A finalidade é carregar o ZOOKEEPER, O KAFKA E O KAFKADROP sem ser por linha de comando.
+       A pasta ficará fora de qualquer micro serviço. conforme ficura abaixo
+
+![img_44.png](img_44.png)
+
+ A configuração do docker-compose.yml
+
+        version: "3.0"
+        
+        services:
+        
+        zookeeper:
+        image: confluentinc/cp-zookeeper:5.1.2
+        restart: always
+        environment:
+        ZOOKEEPER_SERVER_ID: 1
+        ZOOKEEPER_CLIENT_PORT: "2181"
+        ZOOKEEPER_TICK_TIME: "2000"
+        ZOOKEEPER_SERVERS: "zookeeper:22888:23888"
+        ports:
+        - "2181:2181"
+        
+        kafka1:
+        image: confluentinc/cp-enterprise-kafka:5.1.2
+        depends_on:
+        - zookeeper
+        ports:
+          - "29092:29092"
+          environment:
+          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:29092
+          KAFKA_ADVERTISED_HOST_NAME: kafka1
+          KAFKA_BROKER_ID: 1
+          KAFKA_BROKER_RACK: "r1"
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_DELETE_TOPIC_ENABLE: "true"
+          KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+          KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8085"
+          KAFKA_JMX_PORT: 9991
+          kafdrop:
+          image: obsidiandynamics/kafdrop
+          restart: "no"
+          ports:
+          - "9000:9000"
+          environment:
+          KAFKA_BROKERCONNECT: "kafka1:29092"
+          depends_on:
+          - kafka1
+
+Obs:  Em algumas images a porta em que o kafka está rodando esta cobfigurado como:
+      
+      spring.kafka.consumer.bootstrap-servers: localhost:9092
+
+      mas precisei alterar nos fontes para:
+         spring.kafka.consumer.bootstrap-servers: localhost:29092
+   
+      ou seja: mudou de 9092 para 29092 - nos fontes já esta atualizado
+
+
+   Para rodar este arquivo você precisará ter o docker desktop instalado
+       https://docs.docker.com/compose/install/
+
+  ![img_45.png](img_45.png)
+
+Novo teste, agora com o ambiente inicialidado pelo docker-compose.yml
+
+![img_47.png](img_47.png)
+
+![img_46.png](img_46.png)
+
 Finalizando por aqui
 
 
