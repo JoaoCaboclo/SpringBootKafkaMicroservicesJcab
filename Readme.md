@@ -446,12 +446,12 @@ http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100
 
 ![img_43.png](img_43.png)
 
+![img_44.png](img_44.png)
+
 ## Configurando o DOCKER-COMPOSE
 
        A finalidade é carregar o ZOOKEEPER, O KAFKA E O KAFKADROP sem ser por linha de comando.
        A pasta ficará fora de qualquer micro serviço. conforme ficura abaixo
-
-![img_44.png](img_44.png)
 
  A configuração do docker-compose.yml
 
