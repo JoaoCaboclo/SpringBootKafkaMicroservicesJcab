@@ -520,6 +520,168 @@ Novo teste, agora com o ambiente inicialidado pelo docker-compose.yml
 
 ![img_46.png](img_46.png)
 
+
+**MELHORIA - GRAVANDO A ORDER NO MONGODB**
+
+    ALTERAÇÕES NO STOCK-SERVICE
+
+    Colocando a dependência do mongoDB no arquivo POM.XML
+
+            <dependency>
+                <groupId>org.springframework.boot</groupId>
+                <artifactId>spring-boot-starter-data-mongodb</artifactId>
+                <version>2.7.0</version>
+            </dependency>
+
+    Configurando o acesso ao mongoDB no application.properties
+
+       spring.data.mongodb.uri=mongodb://localhost:27017/order-service
+
+    Configuração no DOCKER-COMPOSE ( Vou colocar o arquivo copleto aqui )
+
+        version: "3.0"
+
+        services:
+        
+        zookeeper:
+        image: confluentinc/cp-zookeeper:5.1.2
+        restart: always
+        environment:
+        ZOOKEEPER_SERVER_ID: 1
+        ZOOKEEPER_CLIENT_PORT: "2181"
+        ZOOKEEPER_TICK_TIME: "2000"
+        ZOOKEEPER_SERVERS: "zookeeper:22888:23888"
+        ports:
+        - "2181:2181"
+        networks:
+          - jcaboclo-network
+        
+        kafka1:
+        image: confluentinc/cp-enterprise-kafka:5.1.2
+        depends_on:
+        - zookeeper
+        ports:
+          - "29092:29092"
+          environment:
+          KAFKA_ZOOKEEPER_CONNECT: "zookeeper:2181"
+          KAFKA_LISTENER_SECURITY_PROTOCOL_MAP: PLAINTEXT:PLAINTEXT,PLAINTEXT_HOST:PLAINTEXT
+          KAFKA_INTER_BROKER_LISTENER_NAME: PLAINTEXT
+          KAFKA_ADVERTISED_LISTENERS: PLAINTEXT://kafka1:9092,PLAINTEXT_HOST://localhost:29092
+          KAFKA_ADVERTISED_HOST_NAME: kafka1
+          KAFKA_BROKER_ID: 1
+          KAFKA_BROKER_RACK: "r1"
+          KAFKA_OFFSETS_TOPIC_REPLICATION_FACTOR: 1
+          KAFKA_DELETE_TOPIC_ENABLE: "true"
+          KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
+          KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8085"
+          KAFKA_JMX_PORT: 9991
+          networks:
+          - jcaboclo-network
+        
+        kafdrop:
+        image: obsidiandynamics/kafdrop
+        restart: "no"
+        ports:
+        - "9000:9000"
+        environment:
+        KAFKA_BROKERCONNECT: "kafka1:29092"
+        depends_on:
+          - kafka1
+          networks:
+          - jcaboclo-network
+        
+        mongo-express:
+        image: mongo-express
+        ports:
+        - 8787:8787
+        environment:
+        ME_CONFIG_BASICAUTH_USERNAME: renatogroffe
+        ME_CONFIG_BASICAUTH_PASSWORD: MongoExpress2019!
+        ME_CONFIG_MONGODB_PORT: 27017
+        ME_CONFIG_MONGODB_ADMINUSERNAME: root
+        ME_CONFIG_MONGODB_ADMINPASSWORD: MongoDB2019!
+        links:
+          - mongo
+          networks:
+          - jcaboclo-network
+        
+        mongo:
+        image: mongo
+        environment:
+        MONGO_INITDB_ROOT_USERNAME: root
+        MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+        ports:
+        - "27017:27017"
+        volumes:
+          - /home/renatogroffe/Desenvolvimento/Docker/Volumes/MongoDB:/data/db
+          networks:
+          - jcaboclo-network
+        
+        networks:
+        jcaboclo-network:
+        
+        volumes:
+        zookeeper_data:
+        driver: local
+        kafka_data:
+        driver: bridge
+
+    Agora iremos criar a Repositório e a interface para acessar os dados
+
+![img_50.png](img_50.png)
+
+    package com.jcaboclo.stockservice.repository;
+    
+    import com.jcaboclo.basedomains.dto.Order;
+    import org.springframework.data.mongodb.repository.MongoRepository;
+    
+    public interface OrderRepository extends MongoRepository<Order, String>{
+    }
+
+    Agora, finalmente, iremos ajustar a class consumidora para além de receber o evento, 
+    salvar o objeto ORDER no mongoDB
+
+     Este ajuste será feito na class OrderConsumer
+![img_51.png](img_51.png)
+
+    package com.jcaboclo.stockservice.kafka;
+    
+    import com.jcaboclo.basedomains.dto.OrderEvent;
+    import com.jcaboclo.stockservice.repository.OrderRepository;
+    import org.slf4j.Logger;
+    import org.slf4j.LoggerFactory;
+    import org.springframework.kafka.annotation.KafkaListener;
+    import org.springframework.stereotype.Service;
+    @Service
+    public class OrderConsumer {
+    
+        private final OrderRepository orderRepository;
+    
+        private static final Logger LOGGER = LoggerFactory.getLogger(OrderConsumer.class);
+    
+        public OrderConsumer(OrderRepository orderRepository) {
+            this.orderRepository = orderRepository;
+        }
+    
+        @KafkaListener(
+                topics = "${spring.kafka.topic.name}",
+                groupId = "${spring.kafka.consumer.group-id}"
+        )
+        public void consume(OrderEvent event) {
+            LOGGER.info(String.format("Order event received in stock-service ==> %s", event.toString()));
+    
+            // todo
+            //   Save the order event into the database
+            orderRepository.save(event.getOrder());
+        }
+    }
+
+**Testando pelo POSTMAN**
+![img_49.png](img_49.png)
+
+Consultando no mongoDB
+![img_48.png](img_48.png)
+
 Finalizando por aqui
 
 

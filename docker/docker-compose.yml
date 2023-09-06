@@ -12,6 +12,8 @@ services:
       ZOOKEEPER_SERVERS: "zookeeper:22888:23888"
     ports:
       - "2181:2181"
+    networks:
+      - jcaboclo-network
 
   kafka1:
     image: confluentinc/cp-enterprise-kafka:5.1.2
@@ -32,6 +34,9 @@ services:
       KAFKA_AUTO_CREATE_TOPICS_ENABLE: "true"
       KAFKA_SCHEMA_REGISTRY_URL: "schemaregistry:8085"
       KAFKA_JMX_PORT: 9991
+    networks:
+      - jcaboclo-network
+
   kafdrop:
     image: obsidiandynamics/kafdrop
     restart: "no"
@@ -41,6 +46,45 @@ services:
       KAFKA_BROKERCONNECT: "kafka1:29092"
     depends_on:
       - kafka1
+    networks:
+      - jcaboclo-network
+
+  mongo-express:
+    image: mongo-express
+    ports:
+      - 8787:8787
+    environment:
+      ME_CONFIG_BASICAUTH_USERNAME: renatogroffe
+      ME_CONFIG_BASICAUTH_PASSWORD: MongoExpress2019!
+      ME_CONFIG_MONGODB_PORT: 27017
+      ME_CONFIG_MONGODB_ADMINUSERNAME: root
+      ME_CONFIG_MONGODB_ADMINPASSWORD: MongoDB2019!
+    links:
+      - mongo
+    networks:
+      - jcaboclo-network
+
+  mongo:
+    image: mongo
+    environment:
+      MONGO_INITDB_ROOT_USERNAME: root
+      MONGO_INITDB_ROOT_PASSWORD: MongoDB2019!
+    ports:
+      - "27017:27017"
+    volumes:
+      - /home/renatogroffe/Desenvolvimento/Docker/Volumes/MongoDB:/data/db
+    networks:
+      - jcaboclo-network
+
+networks:
+  jcaboclo-network:
+
+volumes:
+  zookeeper_data:
+    driver: local
+  kafka_data:
+    driver: bridge
+
 
 #  schemaregistry:
 #    image: confluentinc/cp-schema-registry:5.1.2
