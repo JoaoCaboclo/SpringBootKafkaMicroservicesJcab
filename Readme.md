@@ -1,7 +1,7 @@
 
 # Spring Boot Kafka Microservices
 
-    Estudos e Pesquisas do João Caboclo da S. Filho
+**Estudos e Pesquisas do João Caboclo da S. Filho**
 
     Adorei este trabalho!!  -  
     Com certeza irá ajudar muitos!  -  
@@ -12,8 +12,20 @@
     Setembro de 2023 - Uberlândia/Minas gerais/Brasil
 
     Vídeo aula base do aprendizado: https://www.youtube.com/playlist?list=PLGRDMO4rOGcOlnu6QhogZDNFFwiwKh5X9
+ 
+**Stack de Tecnologias usadas neste tutorial**
 
-    
+**
+1.    Event-driven architecture
+2.    SpringBoot 3.0.10
+3.    Java 17
+4.    Docker - Docker-compose
+5.    Apache Log4j   
+6.    ZooKeeper - Kafka - KafkaDrop
+7.    MongoDB
+8.    BFF 
+9.    RestTemplate**
+
 
 ![img_6.png](img_6.png)
 
