@@ -13,19 +13,9 @@
 
     Vídeo aula base do aprendizado: https://www.youtube.com/playlist?list=PLGRDMO4rOGcOlnu6QhogZDNFFwiwKh5X9
  
-**Stack de Tecnologias usadas neste tutorial**
+![img_56.png](img_56.png)
 
-**
-1.    Event-driven architecture
-2.    SpringBoot 3.0.10
-3.    Java 17
-4.    Docker - Docker-compose
-5.    Apache Log4j   
-6.    ZooKeeper - Kafka - KafkaDrop
-7.    MongoDB
-8.    BFF 
-9.    RestTemplate**
-
+## **Let's start!**
 
 ![img_6.png](img_6.png)
 
