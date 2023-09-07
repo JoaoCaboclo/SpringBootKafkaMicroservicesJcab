@@ -45,7 +45,7 @@
     C:\Users\joao.filho\kafka>
         .\bin\windows\kafka-server-start.bat .\config\server.properties
 
-    ![img_11.png](img_11.png)
+![img_11.png](img_11.png)
 
 
 **Criando um Tópico**
@@ -53,14 +53,14 @@
         .\bin\windows\kafka-topics.bat –create –topic topic-jcab1 
             –bootstrap-server localhost:9092
 
-    ![img_12.png](img_12.png)
+![img_12.png](img_12.png)
 
 **Enviando Mensagem para o Tópico**
     C:\Users\joao.filho\kafka>
         .\bin\windows\kafka-console-producer.bat  –topic topic-jcab1 
               –bootstrap-server localhost:9092
 
-    ![img_13.png](img_13.png)
+![img_13.png](img_13.png)
 
 **Lendo as Mensagem do Tópico**
 
@@ -69,13 +69,13 @@
             –from-beginning –bootstrap-server localhost:9092
 
 
-    ![img_14.png](img_14.png)
+![img_14.png](img_14.png)
 
 **Baixando a IDE para gerenciar os Tópicos - KAFKADROP**
     
         curl -LO https://github.com/obsidiandynamics/kafdrop/releases/download/3.30.0/kafdrop-3.30.0.jar
 
-    ![img_15.png](img_15.png)
+![img_15.png](img_15.png)
 
     Altere o nome de kafdrop-3.30.0.jar para kafdrop.jar
 
@@ -97,12 +97,11 @@
 
 ## **Criando os Micros Serviços**
 
-    Spring Boot Kafka Microservices Create os Microservices
-    
+ 
     Spring Initializr
           https://start.spring.io/
 
-    ![img_20.png](img_20.png)
+![img_20.png](img_20.png)
 
 ![img_21.png](img_21.png)
 
@@ -185,14 +184,14 @@ BASE-DOMAINS
             <scope>compile</scope>
        </dependency>
 
-**CONFIGURANDO O PRODUCER NO APPLICATION.PROPERTIES** 
+    **CONFIGURANDO O PRODUCER NO APPLICATION.PROPERTIES** 
 
     spring.kafka.producer.bootstrap-servers=localhost:9092
     spring.kafka.producer.key-serializer=org.apache.kafka.common.serialization.StringSerializer
     spring.kafka.producer.value-serializer=org.springframework.kafka.support.serializer.JsonSerializer
     spring.kafka.topic.name=order_topics
 
-**A Class KafkaTopicConfig**
+      **A Class KafkaTopicConfig**
 
     package com.jcaboclo.orderservice.config;
     import org.apache.kafka.clients.admin.NewTopic;
@@ -642,7 +641,7 @@ http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100
 
 ![img_50.png](img_50.png)
 
-    **A interface OrderRepository  para permitir acesso ao banco de dados mongoDB**
+**A interface OrderRepository  para permitir acesso ao banco de dados mongoDB**
 
     package com.jcaboclo.stockservice.repository;
     
@@ -652,7 +651,7 @@ http://localhost:9000/topic/order_topics/messages?partition=0&offset=0&count=100
     public interface OrderRepository extends MongoRepository<Order, String>{
     }
 
-    **Agora, finalmente, iremos ajustar a class consumidora para além de receber o evento, 
+**Agora, finalmente, iremos ajustar a class consumidora para além de receber o evento, 
       salvar o objeto ORDER no mongoDB**
 
      Este ajuste será feito na class OrderConsumer
@@ -713,7 +712,7 @@ Consultando no mongoDB
         spring.data.mongodb.uri=mongodb://localhost:27017/order-service
         backend.order-api.url = ${variable.url:http://localhost:8080/api/v1/orders}
 
-    **Incialmente, criamos um pacote chamado bff. A estrutura está como na figura abaixo**
+**Incialmente, criamos um pacote chamado bff. A estrutura está como na figura abaixo**
 
 ![img_53.png](img_53.png)
 
