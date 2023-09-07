@@ -3,27 +3,31 @@
 
 **Estudos e Pesquisas do João Caboclo da S. Filho**
 
+![img_66.png](img_66.png)
+
     Adorei este trabalho!!  -  
     Com certeza irá ajudar muitos!  -  
     Dúvidas: johncaboclo@gmail.com, ou me chama pelo linkedin mesmo.
+    código no github:  https://github.com/JoaoCaboclo/SpringBootKafkaMicroservicesJcab.git
 
     Adicionei esta documentação para ajudar na compreensão e desenvolvimento do projeto
     Espero que te ajude a evoluir, assim como ajudou-me!!!!
     Setembro de 2023 - Uberlândia/Minas gerais/Brasil
 
     Vídeo aula base do aprendizado: https://www.youtube.com/playlist?list=PLGRDMO4rOGcOlnu6QhogZDNFFwiwKh5X9
- 
+     
+
 ![img_56.png](img_56.png)
 
 ## **Let's start!**
 
-![img_6.png](img_6.png)
+![img_67.png](img_67.png)
 
-![img_7.png](img_7.png)
+![img_68.png](img_68.png)
 
-![img_8.png](img_8.png)
+![img_69.png](img_69.png)
 
-![img_9.png](img_9.png)
+## **Configurando o Ambiente**
 
 **Baixar o KAFKA**
     https://www.apache.org/dyn/closer.cgi?path=/kafka/3.5.0/kafka_2.13-3.5.0.tgz
@@ -91,7 +95,7 @@
 ![img_19.png](img_19.png)
 
 
-**O PROJETO SPRING BOOT**
+## **Criando os Micros Serviços**
 
     Spring Boot Kafka Microservices Create os Microservices
     
