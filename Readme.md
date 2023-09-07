@@ -101,7 +101,6 @@
     Spring Initializr
           https://start.spring.io/
 
-![img_20.png](img_20.png)
 
 ![img_21.png](img_21.png)
 
